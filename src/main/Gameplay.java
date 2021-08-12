@@ -16,6 +16,7 @@ import java.awt.*;
 import javax.swing.*;
 import javax.swing.Timer;
 
+//klasa Gameplay salje podatke 
 public class Gameplay extends JPanel implements ActionListener {
 	private Brick br;
 
@@ -53,7 +54,7 @@ public class Gameplay extends JPanel implements ActionListener {
 	private Player2Bullet player2Bullet = null;
 
 	private boolean play = true;
-
+	
 	int portNumber = 8090;
 	Socket socketForServerCommunication;
 	BufferedReader inputFromServer;
@@ -78,6 +79,7 @@ public class Gameplay extends JPanel implements ActionListener {
 
 		try {
 			socketForServerCommunication = new Socket("localhost", portNumber);
+		
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -86,6 +88,7 @@ public class Gameplay extends JPanel implements ActionListener {
 			e.printStackTrace();
 		}
 
+		//inicijalizacija klasa koje primaju(novi tred za primanje podataka) i salju podatke serveru
 		new Thread(new FromServer(socketForServerCommunication)).start();
 		toServer = new ToServer(socketForServerCommunication);
 
@@ -100,37 +103,38 @@ public class Gameplay extends JPanel implements ActionListener {
 	static public void setStatusP1(boolean statusPlayer1) {
 
 		statusP1 = statusPlayer1 ;
+		System.out.println("method: setStatusP1"); 
 
 	}
 		
 	static public void setStatusP2(boolean statusPlayer2) {
 
 		statusP2 = statusPlayer2 ;
-
+		System.out.println("method: setStatusP2");
 	}
 	
 	static public void setP1X(int x) {
 
 		player1X = x;
-
+		System.out.println("method: setP1X");
 	}
 
 	static public void setP2X(int x) {
 
 		player2X = x;
-
+		System.out.println("method: setP2X");
 	}
 
 	static public void setP1Y(int y) {
 
 		player1Y = y;
-
+		System.out.println("method setP1Y");
 	}
 
 	static public void setP2Y(int y) {
 
 		player2Y = y;
-
+		System.out.println("method setP2Y");
 	}
 
 	static public void setDirectionP1(boolean right, boolean left, boolean down, boolean up) {
@@ -139,15 +143,20 @@ public class Gameplay extends JPanel implements ActionListener {
 		player1left = left;
 		player1down = down;
 		player1up = up;
+		System.out.println("method setDirectiionP1");
+		System.out.println();
 		
 	}
 	
-static public void setDirectionP2(boolean right, boolean left, boolean down, boolean up) {
+	static public void setDirectionP2(boolean right, boolean left, boolean down, boolean up) {
 		
 		player2right = right;
 		player2left = left;
 		player2down = down;
 		player2up = up;
+		System.out.println("method setDirectiionP2");
+		System.out.println();
+
 		
 	}
 	// treba podesiti sve kordinate koje se pomeraju
@@ -324,7 +333,7 @@ static public void setDirectionP2(boolean right, boolean left, boolean down, boo
 		public void moveP1() {
 			player1XStr = Integer.toString(player1X);
 			player1YStr = Integer.toString(player1Y);
-			xy = player1XStr + "," + player1YStr + ","+direction();
+			xy = player1XStr + "," + player1YStr + ","+ direction();
 			toServer.send(xy);
 		}
 		public String direction() {

@@ -15,19 +15,8 @@ public class Main {
 	static int portNumber = 8090;
 	
 	public static void main(String[] args) throws IOException {
+		
 		JFrame obj=new JFrame();
-		
-		Socket socketForServerCommunication = new Socket("localhost",
-				portNumber); // localhost -> because it connects locally
-
-		BufferedReader inputFromServer = new BufferedReader(
-				new InputStreamReader(
-						socketForServerCommunication.getInputStream()));//init inputstream
-		
-		PrintStream outputToServer = new PrintStream(
-				socketForServerCommunication.getOutputStream());//init ouputstream
-		
-		
 		
 		Gameplay gamePlay = new Gameplay();
 		
@@ -40,8 +29,6 @@ public class Main {
 		obj.add(gamePlay);
 		obj.setVisible(true);
 
-		
-		
 		
 	}
 

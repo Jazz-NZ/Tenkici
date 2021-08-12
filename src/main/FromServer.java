@@ -22,9 +22,7 @@ public class FromServer extends Thread {
 		
 		System.out.println("FromServer zapocet");
 		
-		
 		try {
-			
 			
 			BufferedReader inputFromServer = new BufferedReader(
 					new InputStreamReader(
@@ -48,22 +46,27 @@ public class FromServer extends Thread {
 				//inicijalni string je duzine 1 i u njemu se namesta status
 				
 				System.out.println(data); 
-				if(data.length()==1) {
-					System.out.println(data);
+				
+				if(data.length() == 1) {
+//					System.out.println(data);
+					
 					if(data.contains("1")) {
 						Gameplay.setStatusP1(true);
+					
 					}else {
-						
 						Gameplay.setStatusP2(true);	
+					
 					}
 					
+				}
+				
+				else {
 					
-				}else {
-				String dataArr[] = data.split(",");
+					String dataArr[] = data.split(","); // splituju se player,x,y,_,_,_,_ (smer)
 				
 				 //podesavanje statusa 1 ili 2
-				if(dataArr[0].contains("1")) { //provera da li je u pitanju igrac 1
-					System.out.println("Pomeranje igraca 1");
+					if(dataArr[0].contains("1")) { //provera da li je u pitanju igrac 1
+						System.out.println("Pomeranje igraca 1");
 					
 					
 					int x = Integer.parseInt(dataArr[1]);

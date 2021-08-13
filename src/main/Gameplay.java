@@ -16,7 +16,6 @@ import java.awt.*;
 import javax.swing.*;
 import javax.swing.Timer;
 
-//klasa Gameplay salje podatke 
 public class Gameplay extends JPanel implements ActionListener {
 	private Brick br;
 
@@ -29,7 +28,7 @@ public class Gameplay extends JPanel implements ActionListener {
 	private static boolean player1up = true;
 	private int player1score = 0;
 	private int player1lives = 5;
-	private boolean player1Shoot = false;
+	private static boolean player1Shoot = false;
 	private String bulletShootDir1 = "";
 
 	private ImageIcon player2;
@@ -41,7 +40,7 @@ public class Gameplay extends JPanel implements ActionListener {
 	private static boolean player2up = true;
 	private int player2score = 0;
 	private int player2lives = 5;
-	private boolean player2Shoot = false;
+	private static boolean player2Shoot = false;
 	private String bulletShootDir2 = "";
 
 	private Timer timer;
@@ -50,8 +49,8 @@ public class Gameplay extends JPanel implements ActionListener {
 	private Player1Listener player1Listener;
 	private Player2Listener player2Listener;
 
-	private Player1Bullet player1Bullet = null;
-	private Player2Bullet player2Bullet = null;
+	private static Player1Bullet player1Bullet = null;
+	private static Player2Bullet player2Bullet = null;
 
 	private boolean play = true;
 	
@@ -94,11 +93,6 @@ public class Gameplay extends JPanel implements ActionListener {
 
 	}
 
-	static public void moveP2(int x) {
-
-		player2X = x;
-
-	}
 
 	static public void setStatusP1(boolean statusPlayer1) {
 
@@ -136,6 +130,7 @@ public class Gameplay extends JPanel implements ActionListener {
 		player2Y = y;
 		System.out.println("method setP2Y");
 	}
+	
 
 	static public void setDirectionP1(boolean right, boolean left, boolean down, boolean up) {
 		
@@ -159,8 +154,42 @@ public class Gameplay extends JPanel implements ActionListener {
 
 		
 	}
-	// treba podesiti sve kordinate koje se pomeraju
-
+	
+	public static void handleBullet1() {
+		
+		player1Shoot = true;
+		
+		if(player1Shoot)
+			if (player1up) {
+				player1Bullet = new Player1Bullet(player1X + 20, player1Y);
+			} else if (player1down) {
+				player1Bullet = new Player1Bullet(player1X + 20, player1Y + 40);
+			} else if (player1right) {
+				player1Bullet = new Player1Bullet(player1X + 40, player1Y + 20);
+			} else if (player1left) {
+				player1Bullet = new Player1Bullet(player1X, player1Y + 20);
+			}
+	}
+	
+	public static void handleBullet2() {
+		
+		player2Shoot = true;
+		
+		if(player2Shoot)
+			if (player2up) {
+				player2Bullet = new Player2Bullet(player2X + 20, player2Y);
+			} else if (player2down) {
+				player2Bullet = new Player2Bullet(player2X + 20, player2Y + 40);
+			} else if (player2right) {
+				player2Bullet = new Player2Bullet(player2X + 40, player2Y + 20);
+			} else if (player2left) {
+				player2Bullet = new Player2Bullet(player2X, player2Y + 20);
+			}
+			
+		
+	}
+	
+	//paints every object onto to frame
 	public void paint(Graphics g) {
 		// play background
 		g.setColor(Color.black);
@@ -200,7 +229,8 @@ public class Gameplay extends JPanel implements ActionListener {
 				player2 = new ImageIcon("player2_tank_left.png");
 
 			player2.paintIcon(this, g, player2X, player2Y);
-
+			
+			//draw bullets
 			if (player1Bullet != null && player1Shoot) {
 				if (bulletShootDir1.equals("")) {
 					if (player1up) {
@@ -226,15 +256,15 @@ public class Gameplay extends JPanel implements ActionListener {
 					bulletShootDir1 = "";
 				}
 
-				if (br.checkCollision(player1Bullet.getX(), player1Bullet.getY())
-						|| br.checkSolidCollision(player1Bullet.getX(), player1Bullet.getY())) {
+				if (player1Bullet != null && ( br.checkCollision(player1Bullet.getX(), player1Bullet.getY())
+						|| br.checkSolidCollision(player1Bullet.getX(), player1Bullet.getY()))) {
 					player1Bullet = null;
 					player1Shoot = false;
 					bulletShootDir1 = "";
 				}
 
-				if (player1Bullet.getY() < 1 || player1Bullet.getY() > 580 || player1Bullet.getX() < 1
-						|| player1Bullet.getX() > 630) {
+				if (player1Bullet != null && (player1Bullet.getY() < 1 || player1Bullet.getY() > 580 || player1Bullet.getX() < 1
+						|| player1Bullet.getX() > 630)) {
 					player1Bullet = null;
 					player1Shoot = false;
 					bulletShootDir1 = "";
@@ -266,15 +296,15 @@ public class Gameplay extends JPanel implements ActionListener {
 					bulletShootDir2 = "";
 				}
 
-				if (br.checkCollision(player2Bullet.getX(), player2Bullet.getY())
-						|| br.checkSolidCollision(player2Bullet.getX(), player2Bullet.getY())) {
+				if (player2Bullet != null && ( br.checkCollision(player2Bullet.getX(), player2Bullet.getY())
+						|| br.checkSolidCollision(player2Bullet.getX(), player2Bullet.getY()))) {
 					player2Bullet = null;
 					player2Shoot = false;
 					bulletShootDir2 = "";
 				}
 
-				if (player2Bullet.getY() < 1 || player2Bullet.getY() > 580 || player2Bullet.getX() < 1
-						|| player2Bullet.getX() > 630) {
+				if (player2Bullet != null && (player2Bullet.getY() < 1 || player2Bullet.getY() > 580 || player2Bullet.getX() < 1
+						|| player2Bullet.getX() > 630)) {
 					player2Bullet = null;
 					player2Shoot = false;
 					bulletShootDir2 = "";
@@ -336,6 +366,7 @@ public class Gameplay extends JPanel implements ActionListener {
 			xy = player1XStr + "," + player1YStr + ","+ direction();
 			toServer.send(xy);
 		}
+		
 		public String direction() {
 			//desno levo dole gore
 			
@@ -358,7 +389,7 @@ public class Gameplay extends JPanel implements ActionListener {
 
 		public void keyReleased(KeyEvent e) {
 		}
-
+		
 		public void keyPressed(KeyEvent e) {
 
 			if (statusP1) { // pogledati komenatar nize kod igraca 2
@@ -399,6 +430,7 @@ public class Gameplay extends JPanel implements ActionListener {
 						}
 
 						player1Shoot = true;
+						toServer.sendBullet(player1Shoot); //sends bullet
 					}
 				}
 				if (e.getKeyCode() == KeyEvent.VK_W) {
@@ -408,11 +440,9 @@ public class Gameplay extends JPanel implements ActionListener {
 					player1up = true;
 
 					if (!(player1Y < 10)) {
-						player1Y -= 10;
+						player1Y -= 20;
 						moveP1();
-
 					}
-
 				}
 				if (e.getKeyCode() == KeyEvent.VK_A) {
 					player1right = false;
@@ -421,9 +451,8 @@ public class Gameplay extends JPanel implements ActionListener {
 					player1up = false;
 
 					if (!(player1X < 10)) {
-						player1X -= 10;
+						player1X -= 20;
 						moveP1();
-
 					}
 				}
 				if (e.getKeyCode() == KeyEvent.VK_S) {
@@ -433,7 +462,7 @@ public class Gameplay extends JPanel implements ActionListener {
 					player1up = false;
 
 					if (!(player1Y > 540)) {
-						player1Y += 10;
+						player1Y += 20;
 						moveP1();
 					}
 				}
@@ -444,7 +473,7 @@ public class Gameplay extends JPanel implements ActionListener {
 					player1up = false;
 
 					if (!(player1X > 590)) {
-						player1X += 10;
+						player1X += 20;
 						moveP1();
 					}
 				}
@@ -502,6 +531,7 @@ public class Gameplay extends JPanel implements ActionListener {
 						}
 
 						player2Shoot = true;
+						toServer.sendBullet(player2Shoot);
 					}
 				}
 				if (e.getKeyCode() == KeyEvent.VK_UP) {
@@ -511,7 +541,7 @@ public class Gameplay extends JPanel implements ActionListener {
 					player2up = true;
 
 					if (!(player2Y < 10)) {
-						player2Y -= 10;
+						player2Y -= 20;
 						moveP2();
 					
 					}
@@ -524,7 +554,7 @@ public class Gameplay extends JPanel implements ActionListener {
 					player2up = false;
 
 					if (!(player2X < 10)) {
-						player2X -= 10;
+						player2X -= 20;
 						moveP2();
 					
 					}
@@ -536,7 +566,7 @@ public class Gameplay extends JPanel implements ActionListener {
 					player2up = false;
 
 					if (!(player2Y > 540)) {
-						player2Y += 10;
+						player2Y += 20;
 						moveP2();
 					
 					}
@@ -548,7 +578,7 @@ public class Gameplay extends JPanel implements ActionListener {
 					player2up = false;
 
 					if (!(player2X > 590)) {
-						player2X += 10;
+						player2X += 20;
 						moveP2();
 					
 					}
@@ -557,5 +587,6 @@ public class Gameplay extends JPanel implements ActionListener {
 			}
 		}
 	}
+
 
 }

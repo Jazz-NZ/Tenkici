@@ -20,13 +20,13 @@ public class Player2Bullet {
 	public void move(String face)
 	{
 		if(face.equals("right"))
-			x += 5;
+			x += 10;
 		else if(face.equals("left"))
-			x -= 5;
+			x -= 10;
 		else if(face.equals("up"))
-			y -= 5;
+			y -= 10;
 		else
-			y +=5;
+			y +=10;
 	}
 	
 	public void draw(Graphics g)

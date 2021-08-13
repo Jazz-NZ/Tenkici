@@ -9,8 +9,13 @@ import javax.swing.ImageIcon;
 
 
 public class Player1Bullet {
+	
 	private double x, y;
 	
+	public Player1Bullet() {
+		
+	}
+
 	public Player1Bullet(double x, double y)
 	{
 		this.x = x;
@@ -19,14 +24,22 @@ public class Player1Bullet {
 	
 	public void move(String face)
 	{
-		if(face.equals("right"))
-			x += 5;
-		else if(face.equals("left"))
-			x -= 5;
-		else if(face.equals("up"))
-			y -= 5;
-		else
-			y +=5;
+		if(face.equals("right")) {
+			x += 10;
+		}
+			
+		else if(face.equals("left")) {
+			x -= 10;
+		}
+			
+		else if(face.equals("up")) {
+			y -= 10;
+		}
+			
+		else {
+			y +=10;
+		}
+			
 	}
 	
 	public void draw(Graphics g)
@@ -42,6 +55,13 @@ public class Player1Bullet {
 	public int getY()
 	{
 		return (int)y;
+	}
+	public void setX(double x) {
+		this.x = x;
+	}
+
+	public void setY(double y) {
+		this.y = y;
 	}
 
 }

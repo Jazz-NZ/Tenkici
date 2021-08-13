@@ -1,5 +1,6 @@
 package main;
 
+import java.awt.Graphics;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.net.Socket;
@@ -25,11 +26,19 @@ public class ToServer {
 	
 	public void send(String playerXY) {
 		
-		//slanje podataka ka serveru
 		outputToServer.println(playerXY);
 		
 	}
 	
+	public void sendBullet(boolean bullet) {
+		
+		outputToServer.println("bulletxy," + bullet);
+	}
+	
+//	public void sendBullet(Graphics g) {
+//		
+//		outputToServer.println("bulletg: " + g);
+//	}
 	
 	
 }

@@ -1,5 +1,6 @@
 package main;
 
+import java.awt.Graphics;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -16,11 +17,14 @@ public class FromServer extends Thread {
 		socketForServerCommunication = socket;
 	}
 	
+	
 	public void run() {
 		
-		int portNumber = 8090;
+//		int portNumber = 8090;
 		
 		System.out.println("FromServer zapocet");
+		
+		
 		
 		try {
 			
@@ -47,65 +51,83 @@ public class FromServer extends Thread {
 				
 				System.out.println(data); 
 				
+				//INICIJALIZACIJA
 				if(data.length() == 1) {
-//					System.out.println(data);
-					
 					if(data.contains("1")) {
 						Gameplay.setStatusP1(true);
-					
 					}else {
 						Gameplay.setStatusP2(true);	
-					
 					}
-					
 				}
-				
+				//POCETAK IGRE I PRENOS KORDINATA
 				else {
 					
 					String dataArr[] = data.split(","); // splituju se player,x,y,_,_,_,_ (smer)
 				
 				 //podesavanje statusa 1 ili 2
 					if(dataArr[0].contains("1")) { //provera da li je u pitanju igrac 1
-						System.out.println("Pomeranje igraca 1");
 					
+						//PRIJEM KORDINATA METKA
+						if(dataArr[1].contains("bullet")) {
+							System.out.println("pomeranje bulleta 1");
+							System.out.println();
+							
+							Gameplay.handleBullet1();
+						}
+						
+						//PRIJEM KORDINATA IGRACA
+						else {
+							System.out.println("Pomeranje igraca 1");
+							System.out.println();
+							
+							int x = Integer.parseInt(dataArr[1]);
+							Gameplay.setP1X(x); //podesavanje x kordinate igraca 1
+							int y = Integer.parseInt(dataArr[2]);
+							Gameplay.setP1Y(y); //podesavanje y kordinate
+							if(dataArr[3].contains("1")) {
+								Gameplay.setDirectionP1(true, false, false, false);
+							}
+							if(dataArr[4].contains("1")) {
+								Gameplay.setDirectionP1(false, true, false, false);
+							}
+							if(dataArr[5].contains("1")) {
+								Gameplay.setDirectionP1(false, false, true, false);
+							}
+							if(dataArr[6].contains("1")) {
+								Gameplay.setDirectionP1(false, false, false, true);
+							}
+						}
+							
+					}
+						
+					//igrac 2
+					else {
 					
-					int x = Integer.parseInt(dataArr[1]);
-					Gameplay.setP1X(x); //podesavanje x kordinate igraca 1
-					int y = Integer.parseInt(dataArr[2]);
-					Gameplay.setP1Y(y); //podesavanje y kordinate
-					if(dataArr[3].contains("1")) {
-						Gameplay.setDirectionP1(true, false, false, false);
+						if(dataArr[1].contains("bullet")) {
+							System.out.println("pomeranje bulleta 2");
+							System.out.println();
+						
+							Gameplay.handleBullet2();
+						}
+						else {
+							int x = Integer.parseInt(dataArr[1]);
+							Gameplay.setP2X(x); //podesavanje x kordinate igraca 2
+							int y = Integer.parseInt(dataArr[2]);
+							Gameplay.setP2Y(y); //podesavanje y kordinate
+							if(dataArr[3].contains("1")) {
+								Gameplay.setDirectionP2(true, false, false, false);
+							}
+							if(dataArr[4].contains("1")) {
+								Gameplay.setDirectionP2(false, true, false, false);
+							}
+							if(dataArr[5].contains("1")) {
+								Gameplay.setDirectionP2(false, false, true, false);
+							}
+							if(dataArr[6].contains("1")) {
+								Gameplay.setDirectionP2(false, false, false, true);
+							}
+						}
 					}
-					if(dataArr[4].contains("1")) {
-						Gameplay.setDirectionP1(false, true, false, false);
-					}
-					if(dataArr[5].contains("1")) {
-						Gameplay.setDirectionP1(false, false, true, false);
-					}
-					if(dataArr[6].contains("1")) {
-						Gameplay.setDirectionP1(false, false, false, true);
-					}
-				}else {
-					
-					
-					int x = Integer.parseInt(dataArr[1]);
-					Gameplay.setP2X(x); //podesavanje x kordinate igraca 2
-					int y = Integer.parseInt(dataArr[2]);
-					Gameplay.setP2Y(y); //podesavanje y kordinate
-					if(dataArr[3].contains("1")) {
-						Gameplay.setDirectionP2(true, false, false, false);
-					}
-					if(dataArr[4].contains("1")) {
-						Gameplay.setDirectionP2(false, true, false, false);
-					}
-					if(dataArr[5].contains("1")) {
-						Gameplay.setDirectionP2(false, false, true, false);
-					}
-					if(dataArr[6].contains("1")) {
-						Gameplay.setDirectionP2(false, false, false, true);
-					}
-					
-				}
 				}
 				//int x = Integer.parseInt(newX);
 				//Gameplay.moveP2(x);
@@ -117,10 +139,6 @@ public class FromServer extends Thread {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} // localhost -> because it connects locally
-
-		
-		
-		//ChatClientKeyboard keyboardInit = new ChatClientKeyboard(outputToServer);
 		
 	}
 

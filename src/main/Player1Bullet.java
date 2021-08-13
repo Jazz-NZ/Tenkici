@@ -25,26 +25,26 @@ public class Player1Bullet {
 	public void move(String face)
 	{
 		if(face.equals("right")) {
-			x += 10;
+			x += 20;
 		}
 			
 		else if(face.equals("left")) {
-			x -= 10;
+			x -= 20;
 		}
 			
 		else if(face.equals("up")) {
-			y -= 10;
+			y -= 20;
 		}
 			
 		else {
-			y +=10;
+			y +=20;
 		}
 			
 	}
 	
 	public void draw(Graphics g)
 	{
-		g.setColor(Color.yellow);
+		g.setColor(Color.green);
 		g.fillOval((int) x, (int) y, 10, 10);
 	}
 	
